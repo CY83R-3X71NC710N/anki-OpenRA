@@ -23,19 +23,17 @@ from aqt.utils import tooltip
 from aqt.reviewer import Reviewer
 
 
-import PyQt4.QtCore
+import PyQt6.QtCore
 
 import struct
 
 import math
 import random
 import json
-import httplib
+import http.client
 from threading import Thread
 import time
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 ### constants related to progress bar
 ### ---------------------------------
@@ -48,12 +46,12 @@ qbr = 0 # Border radius (> 0 for rounded corners).
 # optionally restricts progress bar width
 maxWidth = ""  # (e.g. "5px". default: "")
 
-orientationHV = Qt.Horizontal # Show bar horizontally (side to side). Use with top/bottom dockArea.
+orientationHV = Qt.Orientation.Horizontal # Show bar horizontally (side to side). Use with top/bottom dockArea.
 # orientationHV = Qt.Vertical # Show bar vertically (up and down). Use with right/left dockArea.
 
 pbStyle = ""
 
-dockArea = Qt.TopDockWidgetArea # Shows bar at the top. Use with horizontal orientation.
+dockArea = Qt.DockWidgetArea.TopDockWidgetArea # Shows bar at the top. Use with horizontal orientation.
 
 __version__ = '0.1'
 
@@ -81,10 +79,10 @@ def send_request(uri, multiplier = 1):
         "multiplier": multiplier
         }
     try:
-        conn = httplib.HTTPConnection('localhost:12345')
+        conn = http.client.HTTPConnection('localhost:12345')
         conn.request('POST', uri, "", hdr)
         response = conn.getresponse()
-        data = response.read() # same as r.text in 3.x
+        data = response.read().decode('utf-8') # same as r.text in 3.x
         update_bar(data)
     except:
         update_bar("Start the game!")
@@ -96,7 +94,7 @@ def answerCard(self, ease, _old):
     
 
 def keyHandler(self, evt, _old):
-    key = unicode(evt.text())
+    key = evt.text()
     if key == "z":
         try:# throws an error on undo -> do -> undo pattern,  otherwise works fine
             mw.onUndo()
@@ -126,14 +124,14 @@ pbdStyle = QStyleFactory.create("%s" % (pbStyle)) # Don't touch.
 
 #Defining palette in case needed for custom colors with themes.
 palette = QPalette()
-palette.setColor(QPalette.Base, QColor(qbg))
-palette.setColor(QPalette.Highlight, QColor(qfg))
-palette.setColor(QPalette.Button, QColor(qbg))
-palette.setColor(QPalette.WindowText, QColor(qtxt))
-palette.setColor(QPalette.Window, QColor(qbg))
+palette.setColor(QPalette.ColorRole.Base, QColor(qbg))
+palette.setColor(QPalette.ColorRole.Highlight, QColor(qfg))
+palette.setColor(QPalette.ColorRole.Button, QColor(qbg))
+palette.setColor(QPalette.ColorRole.WindowText, QColor(qtxt))
+palette.setColor(QPalette.ColorRole.Window, QColor(qbg))
 
 if maxWidth:
-    if orientationHV == Qt.Horizontal:
+    if orientationHV == Qt.Orientation.Horizontal:
         restrictSize = "max-height: %s;" % maxWidth
     else:
         restrictSize = "max-width: %s;" % maxWidth
@@ -161,10 +159,10 @@ def _dock(pb):
     if len(existing_widgets) > 0:
         mw.setDockNestingEnabled(True)
 
-        if dockArea == Qt.TopDockWidgetArea or dockArea == Qt.BottomDockWidgetArea:
-            stack_method = Qt.Vertical
-        if dockArea == Qt.LeftDockWidgetArea or dockArea == Qt.RightDockWidgetArea:
-            stack_method = Qt.Horizontal
+        if dockArea == Qt.DockWidgetArea.TopDockWidgetArea or dockArea == Qt.DockWidgetArea.BottomDockWidgetArea:
+            stack_method = Qt.Orientation.Vertical
+        if dockArea == Qt.DockWidgetArea.LeftDockWidgetArea or dockArea == Qt.DockWidgetArea.RightDockWidgetArea:
+            stack_method = Qt.Orientation.Horizontal
         mw.splitDockWidget(existing_widgets[0], dock, stack_method)
 
     if qbr > 0 or pbdStyle != None:
@@ -232,6 +230,3 @@ addHook("profileLoaded", setup_progressbar)
 
 Reviewer._answerCard = wrap(Reviewer._answerCard, answerCard, "around")
 Reviewer._keyHandler = wrap(Reviewer._keyHandler, keyHandler, "around")
-
-        
-
