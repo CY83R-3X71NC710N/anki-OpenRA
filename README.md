@@ -14,6 +14,7 @@ export PATH="/opt/homebrew/opt/dotnet-sdk/bin:$PATH" >> ~/.zshrc
 source ~/.zshrc
 xcode-select --install
 (Get Macports installed from: https://www.macports.org/install.php)
+echo 'export PATH=/opt/local/bin:/opt/local/sbin:$PATH' >> .zshrc
 sudo port install msbuild
 sudo make
 ```
