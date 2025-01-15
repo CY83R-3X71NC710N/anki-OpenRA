@@ -5,6 +5,19 @@
 4. Your resources will show up once Anki is properly connected.
 5. rip through flashcards!
 
+# Build on macOS:
+```
+brew install dotnet@6
+echo 'export PATH="/opt/homebrew/opt/dotnet@6/bin:$PATH"' >> ~/.zshrc
+brew install --cask dotnet-sdk
+export PATH="/opt/homebrew/opt/dotnet-sdk/bin:$PATH" >> ~/.zshrc
+source ~/.zshrc
+xcode-select --install
+(Get Macports installed from: https://www.macports.org/install.php)
+sudo port install msbuild
+sudo make
+```
+
 # OpenRA
 
 A Libre/Free Real Time Strategy game engine supporting early Westwood classics.
