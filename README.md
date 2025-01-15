@@ -7,14 +7,15 @@
 
 # Build on macOS:
 ```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install dotnet@6
 echo 'export PATH="/opt/homebrew/opt/dotnet@6/bin:$PATH"' >> ~/.zshrc
 brew install --cask dotnet-sdk
 export PATH="/opt/homebrew/opt/dotnet-sdk/bin:$PATH" >> ~/.zshrc
-source ~/.zshrc
 xcode-select --install
 (Get Macports installed from: https://www.macports.org/install.php)
 echo 'export PATH=/opt/local/bin:/opt/local/sbin:$PATH' >> .zshrc
+source ~/.zshrc
 sudo port install msbuild
 sudo make
 ```
